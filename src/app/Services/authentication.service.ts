@@ -22,9 +22,9 @@ export class AuthenticationService {
   //    return this.currentUserSubject.value;
   //  }
 
-   userLogin(username:string, password:string):Observable<any>{
+   userLogin(username:string, password:string):Observable<string>{
      this.url = this.baseUrl+"Login";
-     return this.http.post(this.url, {username, password});
+     return this.http.post<string>(this.url, {username, password});
      //.pipe(map(user => {
        //store user info and JWT token in local storage
        //localStorage.setItem("currentUser", JSON.stringify(user));
@@ -42,8 +42,8 @@ export class AuthenticationService {
      localStorage.removeItem("currentUser");
    }
 
-   registerUser(username:string, password:string):Observable<any>{
+   registerUser(username:string, password:string):Observable<string>{
     this.url = this.baseUrl+"Register";
-    return this.http.post(this.url, {"userName":username, "password":password});
+    return this.http.post<string>(this.url, {"userName":username, "password":password});
   }
 }

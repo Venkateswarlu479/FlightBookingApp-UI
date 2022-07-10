@@ -1,1 +1,290 @@
-<p>manage-airline works!</p>
+<mat-tab-group #tabGroup mat-align-tabs="center" animationDuration="0ms">
+  <mat-tab label="Add Airline">
+    <div class="d-flex justify-content-center">    
+      <div class="card m-3">            
+          <div class="card-body">                
+              <form [formGroup]="airlineRegisterForm" (ngSubmit)="addAirline()">                    
+                  <div class="form-group col">                        
+                      <label>Airline Name</label>                        
+                      <input type="text" formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.airlineName.errors }">                       
+                      <div *ngIf="airlineAdded && addAirlineControls.airlineName.errors" class="invalid-feedback">                            
+                          <div *ngIf="addAirlineControls.airlineName.errors.required">Airline Name is required</div>                            
+                      </div>       
+                  </div>
+                  <div class="form-group col">                        
+                    <label>Contact Number</label>                        
+                    <input type="text" formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactNumber.errors }">                       
+                    <div *ngIf="airlineAdded && addAirlineControls.contactNumber.errors" class="invalid-feedback">                            
+                        <div *ngIf="addAirlineControls.contactNumber.errors.required">Contact Number is required</div>                            
+                    </div>       
+                  </div>  
+                  <div class="form-group col">                        
+                    <label>Contact Address</label>                        
+                    <input type="text" formControlName="contactAdress" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactAdress.errors }">                       
+                    <div *ngIf="airlineAdded && addAirlineControls.contactAdress.errors" class="invalid-feedback">                            
+                        <div *ngIf="addAirlineControls.contactAdress.errors.required">Contact Adress is required</div>                            
+                    </div>       
+                  </div>                    
+                  <div class="text-center">                        
+                      <button class="btn btn-primary mr-1">Add Airline</button>                        
+                      <button class="btn btn-secondary ml-3" type="reset" (click)="resetAddAirlineForm()">Clear</button>                   
+                  </div>               
+              </form>           
+          </div>        
+      </div>    
+  </div>
+  </mat-tab>
+
+  <mat-tab label="Block Airline">
+    <div class="d-flex justify-content-center">    
+      <div class="card m-3">            
+          <div class="card-body">                
+              <form [formGroup]="airlineBlockForm" (ngSubmit)="blockAirline()">                    
+                  <div class="form-group col">                        
+                      <label>Airline Name</label>
+                      <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': airlineBlocked && blockAirlineControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
+                          <option value=""></option>                                
+                          <option *ngFor="let airline of airlineList">{{airline}}</option>                                
+                      </select>                          
+                      <div *ngIf="airlineBlocked && blockAirlineControls.airlineName.errors" class="invalid-feedback">                            
+                          <div *ngIf="blockAirlineControls.airlineName.errors.required">Airline Name is required</div>                            
+                      </div>       
+                  </div>
+                  <div class="text-center mt-5">                        
+                      <button class="btn btn-primary mr-1">Block Airline</button>                        
+                      <button class="btn btn-secondary ml-3" type="reset" (click)="resetBlockAirlineForm()">Clear</button>                   
+                  </div>               
+              </form>           
+          </div>        
+      </div>    
+  </div>
+  </mat-tab>
+
+  <mat-tab label="Add Flight">
+    <div class="d-flex justify-content-center">    
+      <div class="card m-3">            
+          <div class="card-body">                
+              <form [formGroup]="addInventoryForm" (ngSubmit)="addInventory()">
+                <div class="form-row">                  
+                  <div class="form-group col-6">                        
+                      <label>Airline Name</label>
+                      <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
+                        <option value=""></option>                                
+                        <option *ngFor="let airline of airlineList">{{airline}}</option>                                
+                      </select>                        
+                      <!-- <input type="text" formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.airlineName.errors }">                        -->
+                      <div *ngIf="inventoryAdded && addInventoryControls.airlineName.errors" class="invalid-feedback">                            
+                          <div *ngIf="addInventoryControls.airlineName.errors.required">Airline Name is required</div>                            
+                      </div>       
+                  </div>
+                  <div class="form-group col-6">                        
+                    <label>Flight Number</label>                        
+                    <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.flightNumber.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.airlineName.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.airlineName.errors.required">Flight Number is required</div>                            
+                    </div>       
+                  </div>  
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-6">                        
+                    <label>From Place</label>                        
+                    <input type="text" formControlName="fromPlace" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.fromPlace.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.fromPlace.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.fromPlace.errors.required">From Place is required</div>                            
+                    </div>       
+                  </div>  
+                  <div class="form-group col-6">                        
+                    <label>To Place</label>                        
+                    <input type="text" formControlName="toPlace" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.toPlace.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.toPlace.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.toPlace.errors.required">To Place is required</div>                            
+                    </div>       
+                  </div>
+                </div>
+                <div class="form-row">  
+                  <div class="form-group col-4">                        
+                    <label>Departure Time</label>                        
+                    <input type="time" placeholder="{HH:mm} format" formControlName="departureTime" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.departureTime.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.departureTime.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.departureTime.errors.required">Departure Time is required</div>                            
+                    </div>       
+                  </div>                    
+                  <div class="form-group col-4">                        
+                    <label>Reach Time</label>                        
+                    <input type="time" placeholder="{HH:mm} format" formControlName="reachTime" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.reachTime.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.reachTime.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.reachTime.errors.required">Reach Time is required</div>                            
+                    </div>       
+                  </div>
+                  <div class="form-group col-4">                        
+                    <label>Scheduled Date</label>                        
+                    <input type="date" formControlName="scheduledDate" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.scheduledDate.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.scheduledDate.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.scheduledDate.errors.required">Scheduled Date is required</div>                            
+                    </div>       
+                  </div> 
+                </div>
+                <div class="form-row"> 
+                  <div class="form-group col-4">                        
+                    <label>Instrument Used</label>                        
+                    <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.instrumentUsed.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.instrumentUsed.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
+                    </div>       
+                  </div>    
+                  <div class="form-group col-4">                        
+                    <label>Biz Class Seats</label>                        
+                    <input type="number" formControlName="noOfBizClassSeats" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.noOfBizClassSeats.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.noOfBizClassSeats.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.noOfBizClassSeats.errors.required">BizClassSeats is required</div>                            
+                    </div>       
+                  </div>                    
+                  <div class="form-group col-4">                        
+                    <label>NonBiz Class Seats</label>                        
+                    <input type="number" formControlName="noOfNonBizClassSeats" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.noOfNonBizClassSeats.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.noOfNonBizClassSeats.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.noOfNonBizClassSeats.errors.required">NonBizClassSeats is required</div>                            
+                    </div>       
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-4">                        
+                    <label>Ticket Cost</label>                        
+                    <input type="text" formControlName="ticketCost" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.ticketCost.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.ticketCost.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.ticketCost.errors.required">Ticket Cost is required</div>                            
+                    </div>       
+                  </div>  
+                  <div class="form-group col-4">                        
+                    <label>No Of Rows</label>                        
+                    <input type="number" formControlName="noOfRows" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.noOfRows.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.noOfRows.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.noOfRows.errors.required">No Of Rows is required</div>                            
+                    </div>       
+                  </div> 
+                  <div class="form-group col-4">                        
+                    <label>Opted For Meal</label>                        
+                    <select formControlName="optedForMeal" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.optedForMeal.errors }" [(ngModel)]="mealOpted">                       
+                        <option value=""></option>                                
+                        <option *ngFor="let meal of mealList">{{meal}}</option>                                
+                    </select>
+                    <div *ngIf="inventoryAdded && addInventoryControls.optedForMeal.errors" class="invalid-feedback">                            
+                      <div *ngIf="addInventoryControls.optedForMeal.errors.required">Opted For Meal is required</div>                            
+                    </div>       
+                  </div>
+                </div>     
+                  <div class="text-center">                        
+                      <button class="btn btn-primary mr-1">Add Flight</button>                        
+                      <button class="btn btn-secondary ml-3" type="reset" (click)="resetInventoryForm()">Clear</button>                   
+                  </div>               
+              </form>           
+          </div>        
+      </div>    
+  </div>
+  </mat-tab>
+
+  <mat-tab label="Schedule Flight">
+    <div class="d-flex justify-content-center">    
+      <div class="card m-3">            
+          <div class="card-body">                
+              <form [formGroup]="searchScheduleForm" (ngSubmit)="searchSchedule()">
+                <div class="form-row">                    
+                  <div class="form-group col-4">                        
+                      <label>Select Airline</label>
+                      <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
+                          <option value=""></option>                                
+                          <option *ngFor="let airline of airlineList">{{airline}}</option>                                
+                      </select>                          
+                      <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
+                          <div *ngIf="scheduleSearchControls.airlineName.errors.required">Airline is required</div>                            
+                      </div>       
+                  </div>
+                  <div class="form-group col-4">                        
+                    <label>Flight Number</label>                        
+                    <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.flightNumber.errors }">                       
+                    <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
+                        <div *ngIf="scheduleSearchControls.airlineName.errors.required">Flight Number is required</div>                            
+                    </div>       
+                  </div>
+                  <div class="form-group col-4">                        
+                    <label>Instrument Used</label>                        
+                    <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.instrumentUsed.errors }">                       
+                    <div *ngIf="scheduleSearched && scheduleSearchControls.instrumentUsed.errors" class="invalid-feedback">                            
+                        <div *ngIf="scheduleSearchControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
+                    </div>       
+                  </div>
+                </div> 
+                <div class="text-center">                        
+                    <button class="btn btn-primary mr-1">Search</button>                        
+                    <button class="btn btn-secondary ml-3" type="reset" (click)="resetScheduleForm()">Clear</button>                   
+                </div>               
+              </form>           
+          </div>        
+      </div>    
+  </div>
+
+    <table *ngIf ="scheduleSearched" class="table table-hover mt-3">
+        <thead style="text-align: center;">
+            <tr>
+                <th scope="col">Flight Id</th>
+                <th scope="col">Flight No</th>
+                <th scope="col">Airline Name</th>
+                <th scope="col">From Place</th>
+                <th scope="col">To Place</th>
+                <th scope="col">Dept Time</th>
+                <th scope="col">Reach Time</th>
+                <th scope="col">Scheduled Date</th>
+                <th scope="col">Instrument Used</th>
+                <th scope="col">BizClass Seats</th>
+                <th scope="col">NonBizClass Seats</th>
+                <th scope="col">Ticket Price</th>
+                <th scope="col">Total Rows</th>
+                <th scope="col">Meal Opted</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            <tr *ngIf="editClicked">
+                <td>{{flightModel?.flightId}}</td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.flightNumber"></td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.airlineName"></td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.fromPlace"></td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.toPlace"></td>
+                <td><input style="width: 80px;" type="time" [(ngModel)]="flightModel.departureTime"></td>
+                <td><input style="width: 80px;" type="time" [(ngModel)]="flightModel.reachTime"></td>
+                <td><input style="width: 105px;" type="text" [(ngModel)]="flightModel.scheduledDate"></td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.instrumentUsed"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfBizClassSeats"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfNonBizClassSeats"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.ticketCost"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfRows"></td>
+                <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.optedForMeal"></td>
+                <td>
+                    <button class="btn btn-primary" (click)=scheduleFlight(flightModel)>Schedule</button>
+                </td>
+            </tr>
+            <tr *ngIf="!editClicked">    
+                <td>{{flightModel?.flightId}}</td>
+                <td>{{flightModel?.flightNumber}}</td>
+                <td>{{flightModel?.airlineName}}</td>
+                <td>{{flightModel?.fromPlace}}</td>
+                <td>{{flightModel?.toPlace}}</td>
+                <td>{{flightModel?.departureTime}}</td>
+                <td>{{flightModel?.reachTime}}</td>
+                <td>{{flightModel?.scheduledDate}}</td>
+                <td>{{flightModel?.instrumentUsed}}</td>
+                <td>{{flightModel?.noOfBizClassSeats}}</td>
+                <td>{{flightModel?.noOfNonBizClassSeats}}</td>
+                <td>{{flightModel?.ticketCost}}</td>
+                <td>{{flightModel?.noOfRows}}</td>
+                <td>{{flightModel?.optedForMeal}}</td>
+                <td>
+                    <button class="btn btn-secondary" (click)=editFlight(flightModel)>Edit</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </mat-tab>
+
+</mat-tab-group>
+
+<!-- (click)="tabGroup.selectedIndex = 2" -->

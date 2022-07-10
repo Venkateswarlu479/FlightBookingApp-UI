@@ -1,3 +1,99 @@
-<p>manage-booking works!</p>
-<p>{{flightDetails[0]?.flightId}}</p>
-<p>{{ticketDetails.pnr}}</p>
+<mat-tab-group #tabGroup mat-align-tabs="center" animationDuration="0ms">
+    <mat-tab label="Book Flight">
+        search and ticket booking functionality
+        <!-- <mat-tab label="Schedule Flight">
+            <div class="d-flex justify-content-center">    
+              <div class="card m-3">            
+                  <div class="card-body">                
+                      <form [formGroup]="searchScheduleForm" (ngSubmit)="searchSchedule()">
+                        <div class="form-row">                    
+                          <div class="form-group col-4">                        
+                              <label>Select Airline</label>
+                              <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
+                                  <option value=""></option>                                
+                                  <option *ngFor="let airline of airlineList">{{airline}}</option>                                
+                              </select>                          
+                              <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
+                                  <div *ngIf="scheduleSearchControls.airlineName.errors.required">Airline is required</div>                            
+                              </div>       
+                          </div>
+                          <div class="form-group col-4">                        
+                            <label>Flight Number</label>                        
+                            <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.flightNumber.errors }">                       
+                            <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
+                                <div *ngIf="scheduleSearchControls.airlineName.errors.required">Flight Number is required</div>                            
+                            </div>       
+                          </div>
+                          <div class="form-group col-4">                        
+                            <label>Instrument Used</label>                        
+                            <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.instrumentUsed.errors }">                       
+                            <div *ngIf="scheduleSearched && scheduleSearchControls.instrumentUsed.errors" class="invalid-feedback">                            
+                                <div *ngIf="scheduleSearchControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
+                            </div>       
+                          </div>
+                        </div> 
+                        <div class="text-center">                        
+                            <button class="btn btn-primary mr-1">Search</button>                        
+                            <button class="btn btn-secondary ml-3" type="reset" (click)="resetScheduleForm()">Clear</button>                   
+                        </div>               
+                      </form>           
+                  </div>        
+              </div>    
+          </div>
+        
+            <table *ngIf ="scheduleSearched" class="table table-hover mt-3">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th scope="col">Flight Id</th>
+                        <th scope="col">Flight No</th>
+                        <th scope="col">Airline Name</th>
+                        <th scope="col">From Place</th>
+                        <th scope="col">To Place</th>
+                        <th scope="col">Dept Time</th>
+                        <th scope="col">Reach Time</th>
+                        <th scope="col">Scheduled Date</th>
+                        <th scope="col">Instrument Used</th>
+                        <th scope="col">BizClass Seats</th>
+                        <th scope="col">NonBizClass Seats</th>
+                        <th scope="col">Ticket Price</th>
+                        <th scope="col">Total Rows</th>
+                        <th scope="col">Meal Opted</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <tr>
+                        <td>{{flightModel?.flightId}}</td>
+                        <td>{{flightModel?.flightNumber}}</td>
+                        <td>{{flightModel?.airlineName}}</td>
+                        <td>{{flightModel?.fromPlace}}</td>
+                        <td>{{flightModel?.toPlace}}</td>
+                        <td>{{flightModel?.departureTime}}</td>
+                        <td>{{flightModel?.reachTime}}</td>
+                        <td>{{flightModel?.scheduledDate}}</td>
+                        <td>{{flightModel?.instrumentUsed}}</td>
+                        <td>{{flightModel?.noOfBizClassSeats}}</td>
+                        <td>{{flightModel?.noOfNonBizClassSeats}}</td>
+                        <td>{{flightModel?.ticketCost}}</td>
+                        <td>{{flightModel?.noOfRows}}</td>
+                        <td>{{flightModel?.optedForMeal}}</td>
+                        <td>
+                            <button class="btn btn-secondary" (click)=BookTicket(flightModel)>Book</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </mat-tab> -->
+    </mat-tab>
+
+    <mat-tab label="Apply Discount">
+        apply discount on ticket price
+    </mat-tab>
+    
+    <mat-tab label="Manage Bookings">
+        view, cancel, download ticket details
+    </mat-tab>
+    
+    <mat-tab label="Booking History">
+        Contain all booking info done by logged-in user
+    </mat-tab>
+</mat-tab-group>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/Services/authentication.service';
 
 @Component({
@@ -12,7 +13,9 @@ export class LoginComponent implements OnInit {
   loggedin:boolean = false;
   token:any;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthenticationService) { }
+  constructor(private formBuilder: FormBuilder, 
+              private authService: AuthenticationService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loginform = this.formBuilder.group({
@@ -34,8 +37,9 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.userLogin(this.loginform.value.userName, this.loginform.value.password).subscribe(obj =>{
-      if(obj == undefined || null){
+    this.authService.userLogin(this.loginform.value.userName, this.loginform.value.password)
+    .subscribe(obj =>{
+      if(obj == undefined || obj == null){
         alert('login unsuccessful');
       }
       this.token = obj;
@@ -44,10 +48,16 @@ export class LoginComponent implements OnInit {
         this.authService.setLocalStorage(this.token);
       }
     });
+
+    //Route to respective screens on successful login
+    this.router.navigate(["/airline"]);
+    //this.router.navigate(["/flight"]);
+
     alert('Login Successful!!');
   }
 
   onReset() {
+    this.authService.logout();
     this.loggedin = false;
     this.loginform.reset();
   }
