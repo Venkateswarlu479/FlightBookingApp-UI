@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-left">
+    <div class="container-fluid">
+        <a class="navbar-brand">
+            <img src="https://toppng.com/uploads/preview/flight-logo-11549898075cfemskecyq.png" alt="logo" title="App logo" style="width:40px;">
+            <span style="color:white;" title="App name">Flight Booking Application</span>
+        </a>
+        <ul class="navbar-nav ml-5">
+            <!-- <li class="nav-item" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="/register">Register</a>
+            </li> -->
+            <li class="nav-item" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="/airline" *ngIf="isAnyUserLogin && isAdminLogin">ManageAirline</a>
+            </li>
+            <li class="nav-item" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="/flight" *ngIf="isAnyUserLogin && !isAdminLogin">ManageFlightBooking</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">   
+            <li class="nav-item" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" *ngIf="!isAnyUserLogin" routerLink="">Login</a>
+            </li>
+            <li class="nav-item" role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" *ngIf="isAnyUserLogin" (click)="onLogout()" routerLink="">LogOut</a>
+            </li>
+        </ul>
+    </div>
+</nav>

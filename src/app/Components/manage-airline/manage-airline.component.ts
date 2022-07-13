@@ -3,6 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AirlineManagementService } from 'src/app/Services/airline-management.service';
 import { AirlineRegisterModel } from 'src/app/Models/airline-register-model';
 import { FlightModel } from 'src/app/Models/flight-model';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-airline',
@@ -33,13 +35,15 @@ export class ManageAirlineComponent implements OnInit {
   editClicked: boolean = false;
   mealOptionEdited:any;
 
-  constructor(private formBuilder:FormBuilder, private airlineManageService: AirlineManagementService) { }
+  constructor(private formBuilder:FormBuilder, 
+    private airlineManageService: AirlineManagementService,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.airlineRegisterForm = this.formBuilder.group({
       airlineName: ['', Validators.required],
-      contactNumber: ['', Validators.required],
-      contactAdress: ['', Validators.required]
+      contactNumber: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(12)]],
+      contactAddress: ['', [Validators.required, Validators.maxLength(100)]]
     });
 
     this.airlineBlockForm = this.formBuilder.group({
@@ -57,7 +61,8 @@ export class ManageAirlineComponent implements OnInit {
       instrumentUsed: ['', Validators.required],
       noOfBizClassSeats: ['', Validators.required],
       noOfNonBizClassSeats: ['', Validators.required],
-      ticketCost: ['', Validators.required],
+      bizClassTicketPrice: ['', Validators.required],
+      nonBizClassTicketPrice: ['', Validators.required],
       noOfRows: ['', Validators.required],
       optedForMeal: ['', Validators.required]
     });
@@ -68,12 +73,19 @@ export class ManageAirlineComponent implements OnInit {
       instrumentUsed: ['', Validators.required]
     });
 
+    this.getAirlines();
+  }
+
+  getAirlines(){
     this.airlineManageService.getActiveAirlines().subscribe(
       data => {
-        if(data != null || data != undefined)
         this.airlineList = data;
-        console.log(data)
-      }
+        //console.log(data)
+      },
+      error =>{
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "getAirlines", {duration: 1000});
+      } 
     );
   }
 
@@ -97,12 +109,13 @@ export class ManageAirlineComponent implements OnInit {
     }
     this.airlineManageService.registerAirline(this.airlineRegisterModel).subscribe(
       data => {
-        if(data != null || data != undefined){
-          alert(data);
-        }
+          this.snackBar.open("Airline registered Successfully", "registerAirline", {duration: 1000});
+      },
+      error => {
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "registerAirline", {duration: 1000});
       }
     );
-    //alert('success!')
   }
 
   resetAddAirlineForm(){
@@ -115,6 +128,17 @@ export class ManageAirlineComponent implements OnInit {
     return this.airlineBlockForm.controls;
   }
 
+  onTabChanged(event: MatTabChangeEvent){
+    if(event.index !== 0){
+    this.getAirlines();
+    this.resetAddAirlineForm();
+    this.resetBlockAirlineForm();
+    this.resetInventoryForm();
+    this.resetScheduleForm();
+    this.selectedAirline = '';
+    }
+  }
+
   blockAirline(){
     this.airlineBlocked = true;
     if(this.airlineBlockForm.invalid)
@@ -123,12 +147,13 @@ export class ManageAirlineComponent implements OnInit {
     //service call
     this.airlineManageService.blockAirline(this.selectedAirline, this.userName).subscribe(
       data => {
-        if(data != null || data != undefined){
-          alert(data);
-        }
+          this.snackBar.open("Airline registered Successfully", "blockAirline", {duration: 1000});
+      },
+      error =>{
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "blockAirline", {duration: 1000});
       }
     )
-    //alert('success!')
   }
 
   resetBlockAirlineForm(){
@@ -158,6 +183,8 @@ export class ManageAirlineComponent implements OnInit {
         "instrumentUsed": flightDetails.instrumentUsed,
         "noOfBizClassSeats": flightDetails.noOfBizClassSeats,
         "noOfNonBizClassSeats": flightDetails.noOfNonBizClassSeats,
+        "bizClassTicketPrice": flightDetails.bizClassTicketPrice,
+        "nonBizClassTicketPrice": flightDetails.nonBizClassTicketPrice,
         "ticketCost": flightDetails.ticketCost,
         "noOfRows": flightDetails.noOfRows,
         "optedForMeal": flightDetails.optedForMeal,
@@ -167,9 +194,11 @@ export class ManageAirlineComponent implements OnInit {
     //service call
     this.airlineManageService.addOrScheduleFlight(this.flightModel).subscribe(
       data => {
-        if(data != null || data != undefined){
-          alert(data);
-        }
+        this.snackBar.open("Add or Schedule Flight Successfull", "addOrScheduleFlight", {duration: 1000});
+      },
+      error => {
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "addOrScheduleFlight", {duration: 1000});
       }
     );
   }
@@ -194,11 +223,13 @@ export class ManageAirlineComponent implements OnInit {
     this.airlineManageService.getFlightDetails(scheduleSearchInputs.airlineName, scheduleSearchInputs.flightNumber, scheduleSearchInputs.instrumentUsed)
     .subscribe(
       data => {
-        if(data != null || data != undefined){
-          this.flightModel = data;
-          console.log(this.flightModel);
-          //alert("success");
-        }
+        this.flightModel = data;
+        console.log(this.flightModel);
+        this.snackBar.open("Flight details fetched Successfully", "getFlightDetails", {duration: 1000});
+      },
+      error =>{
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "getFlightDetails", {duration: 1000});
       }
     );
   }
@@ -217,7 +248,11 @@ export class ManageAirlineComponent implements OnInit {
     console.log(flightModel)
     this.airlineManageService.addOrScheduleFlight(flightModel).subscribe(
       response =>{
-        alert(response);
+        this.snackBar.open("Flight Scheduled Successfully", "scheduleFlight", {duration: 1000});
+      },
+      error => {
+        console.log(error);
+        this.snackBar.open("Error occured while getting response", "scheduleFlight", {duration: 1000});
       }
     );
   }

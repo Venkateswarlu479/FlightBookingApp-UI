@@ -12,7 +12,9 @@ import { ManageAirlineComponent } from './Components/manage-airline/manage-airli
 import { ManageBookingComponent } from './Components/manage-booking/manage-booking.component';
 import { PageNotFoundComponent } from './Components/page-not-found/page-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatTabsModule} from '@angular/material/tabs'
+import {MatTabsModule} from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NavbarComponent } from './Components/navbar/navbar.component'
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import {MatTabsModule} from '@angular/material/tabs'
     ManageAirlineComponent,
     ManageBookingComponent,
     PageNotFoundComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import {MatTabsModule} from '@angular/material/tabs'
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSnackBarModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

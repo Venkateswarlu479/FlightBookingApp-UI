@@ -1,4 +1,4 @@
-<mat-tab-group #tabGroup mat-align-tabs="center" animationDuration="0ms">
+<mat-tab-group #tabGroup mat-align-tabs="center" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)">
   <mat-tab label="Add Airline">
     <div class="d-flex justify-content-center">    
       <div class="card m-3">            
@@ -13,16 +13,18 @@
                   </div>
                   <div class="form-group col">                        
                     <label>Contact Number</label>                        
-                    <input type="text" formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactNumber.errors }">                       
+                    <input type="text" placeholder="maxlength 12" formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactNumber.errors }">                       
                     <div *ngIf="airlineAdded && addAirlineControls.contactNumber.errors" class="invalid-feedback">                            
-                        <div *ngIf="addAirlineControls.contactNumber.errors.required">Contact Number is required</div>                            
+                        <div *ngIf="addAirlineControls.contactNumber.errors.required">Contact Number is required</div>
+                        <div *ngIf="addAirlineControls.contactNumber.errors.minlength">Contact Number must be min 10 digits</div>
+                        <div *ngIf="addAirlineControls.contactNumber.errors.maxlength">Contact Number must be max 12 digits</div>
                     </div>       
                   </div>  
                   <div class="form-group col">                        
                     <label>Contact Address</label>                        
-                    <input type="text" formControlName="contactAdress" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactAdress.errors }">                       
-                    <div *ngIf="airlineAdded && addAirlineControls.contactAdress.errors" class="invalid-feedback">                            
-                        <div *ngIf="addAirlineControls.contactAdress.errors.required">Contact Adress is required</div>                            
+                    <input type="text" placeholder="max 100 chars" formControlName="contactAddress" class="form-control" [ngClass]="{ 'is-invalid': airlineAdded && addAirlineControls.contactAddress.errors }">                       
+                    <div *ngIf="airlineAdded && addAirlineControls.contactAddress.errors" class="invalid-feedback">                            
+                        <div *ngIf="addAirlineControls.contactAddress.errors.required">Contact Address is required</div>                            
                     </div>       
                   </div>                    
                   <div class="text-center">                        
@@ -86,20 +88,27 @@
                   </div>  
                 </div>
                 <div class="form-row">
-                  <div class="form-group col-6">                        
+                  <div class="form-group col-4">                        
                     <label>From Place</label>                        
                     <input type="text" formControlName="fromPlace" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.fromPlace.errors }">                       
                     <div *ngIf="inventoryAdded && addInventoryControls.fromPlace.errors" class="invalid-feedback">                            
                         <div *ngIf="addInventoryControls.fromPlace.errors.required">From Place is required</div>                            
                     </div>       
                   </div>  
-                  <div class="form-group col-6">                        
+                  <div class="form-group col-4">                        
                     <label>To Place</label>                        
                     <input type="text" formControlName="toPlace" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.toPlace.errors }">                       
                     <div *ngIf="inventoryAdded && addInventoryControls.toPlace.errors" class="invalid-feedback">                            
                         <div *ngIf="addInventoryControls.toPlace.errors.required">To Place is required</div>                            
                     </div>       
                   </div>
+                  <div class="form-group col-4">                        
+                    <label>Instrument Used</label>                        
+                    <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.instrumentUsed.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.instrumentUsed.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
+                    </div>       
+                  </div> 
                 </div>
                 <div class="form-row">  
                   <div class="form-group col-4">                        
@@ -124,14 +133,7 @@
                     </div>       
                   </div> 
                 </div>
-                <div class="form-row"> 
-                  <div class="form-group col-4">                        
-                    <label>Instrument Used</label>                        
-                    <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.instrumentUsed.errors }">                       
-                    <div *ngIf="inventoryAdded && addInventoryControls.instrumentUsed.errors" class="invalid-feedback">                            
-                        <div *ngIf="addInventoryControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
-                    </div>       
-                  </div>    
+                <div class="form-row">    
                   <div class="form-group col-4">                        
                     <label>Biz Class Seats</label>                        
                     <input type="number" formControlName="noOfBizClassSeats" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.noOfBizClassSeats.errors }">                       
@@ -146,15 +148,22 @@
                         <div *ngIf="addInventoryControls.noOfNonBizClassSeats.errors.required">NonBizClassSeats is required</div>                            
                     </div>       
                   </div>
+                  <div class="form-group col-4">                        
+                    <label>BizClass TicketPrice</label>                        
+                    <input type="text" formControlName="bizClassTicketPrice" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.bizClassTicketPrice.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.bizClassTicketPrice.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.bizClassTicketPrice.errors.required">BizClass TicketPrice is required</div>                            
+                    </div>       
+                  </div> 
                 </div>
                 <div class="form-row">
                   <div class="form-group col-4">                        
-                    <label>Ticket Cost</label>                        
-                    <input type="text" formControlName="ticketCost" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.ticketCost.errors }">                       
-                    <div *ngIf="inventoryAdded && addInventoryControls.ticketCost.errors" class="invalid-feedback">                            
-                        <div *ngIf="addInventoryControls.ticketCost.errors.required">Ticket Cost is required</div>                            
+                    <label>NonBizClass TicketPrice</label>                        
+                    <input type="text" formControlName="nonBizClassTicketPrice" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.nonBizClassTicketPrice.errors }">                       
+                    <div *ngIf="inventoryAdded && addInventoryControls.nonBizClassTicketPrice.errors" class="invalid-feedback">                            
+                        <div *ngIf="addInventoryControls.nonBizClassTicketPrice.errors.required">NonBizClass TicketPrice is required</div>                            
                     </div>       
-                  </div>  
+                  </div>  
                   <div class="form-group col-4">                        
                     <label>No Of Rows</label>                        
                     <input type="number" formControlName="noOfRows" class="form-control" [ngClass]="{ 'is-invalid': inventoryAdded && addInventoryControls.noOfRows.errors }">                       
@@ -223,7 +232,7 @@
       </div>    
   </div>
 
-    <table *ngIf ="scheduleSearched" class="table table-hover mt-3">
+    <table *ngIf ="scheduleSearched && searchScheduleForm.valid" class="table table-hover mt-3">
         <thead style="text-align: center;">
             <tr>
                 <th scope="col">Flight Id</th>
@@ -237,7 +246,8 @@
                 <th scope="col">Instrument Used</th>
                 <th scope="col">BizClass Seats</th>
                 <th scope="col">NonBizClass Seats</th>
-                <th scope="col">Ticket Price</th>
+                <th scope="col">BizClass TicketPrice</th>
+                <th scope="col">NonBizClass TicketPrice</th>
                 <th scope="col">Total Rows</th>
                 <th scope="col">Meal Opted</th>
             </tr>
@@ -255,7 +265,8 @@
                 <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.instrumentUsed"></td>
                 <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfBizClassSeats"></td>
                 <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfNonBizClassSeats"></td>
-                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.ticketCost"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.bizClassTicketPrice"></td>
+                <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.nonBizClassTicketPrice"></td>
                 <td><input style="width: 80px;" type="number" [(ngModel)]="flightModel.noOfRows"></td>
                 <td><input style="width: 80px;" type="text" [(ngModel)]="flightModel.optedForMeal"></td>
                 <td>
@@ -274,7 +285,8 @@
                 <td>{{flightModel?.instrumentUsed}}</td>
                 <td>{{flightModel?.noOfBizClassSeats}}</td>
                 <td>{{flightModel?.noOfNonBizClassSeats}}</td>
-                <td>{{flightModel?.ticketCost}}</td>
+                <td>{{flightModel?.bizClassTicketPrice}}</td>
+                <td>{{flightModel?.nonBizClassTicketPrice}}</td>
                 <td>{{flightModel?.noOfRows}}</td>
                 <td>{{flightModel?.optedForMeal}}</td>
                 <td>

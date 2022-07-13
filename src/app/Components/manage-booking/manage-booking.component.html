@@ -1,88 +1,142 @@
 <mat-tab-group #tabGroup mat-align-tabs="center" animationDuration="0ms">
-    <mat-tab label="Book Flight">
-        search and ticket booking functionality
-        <!-- <mat-tab label="Schedule Flight">
-            <div class="d-flex justify-content-center">    
-              <div class="card m-3">            
-                  <div class="card-body">                
-                      <form [formGroup]="searchScheduleForm" (ngSubmit)="searchSchedule()">
-                        <div class="form-row">                    
-                          <div class="form-group col-4">                        
-                              <label>Select Airline</label>
-                              <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
-                                  <option value=""></option>                                
-                                  <option *ngFor="let airline of airlineList">{{airline}}</option>                                
-                              </select>                          
-                              <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
-                                  <div *ngIf="scheduleSearchControls.airlineName.errors.required">Airline is required</div>                            
+    <mat-tab label="Search Flight">
+        <div class="d-flex justify-content-center">    
+            <div class="card m-3">            
+                <div class="card-body">                
+                    <form [formGroup]="searchFlightForm" (ngSubmit)="searchFlight()">
+                        <div class="form-row">
+                            <div class="form-group col-4">                        
+                              <label>From Place</label>                        
+                              <input type="text" formControlName="fromPlace" class="form-control" [ngClass]="{ 'is-invalid': flightSearched && searchFlightControls.fromPlace.errors }">                       
+                              <div *ngIf="flightSearched && searchFlightControls.fromPlace.errors" class="invalid-feedback">                            
+                                  <div *ngIf="searchFlightControls.fromPlace.errors.required">From Place is required</div>                            
                               </div>       
-                          </div>
-                          <div class="form-group col-4">                        
-                            <label>Flight Number</label>                        
-                            <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.flightNumber.errors }">                       
-                            <div *ngIf="scheduleSearched && scheduleSearchControls.airlineName.errors" class="invalid-feedback">                            
-                                <div *ngIf="scheduleSearchControls.airlineName.errors.required">Flight Number is required</div>                            
+                            </div>  
+                            <div class="form-group col-4">                        
+                              <label>To Place</label>                        
+                              <input type="text" formControlName="toPlace" class="form-control" [ngClass]="{ 'is-invalid': flightSearched && searchFlightControls.toPlace.errors }">                       
+                              <div *ngIf="flightSearched && searchFlightControls.toPlace.errors" class="invalid-feedback">                            
+                                  <div *ngIf="searchFlightControls.toPlace.errors.required">To Place is required</div>                            
+                              </div>       
+                            </div>
+                            <div class="form-group col-4">                        
+                                <label>Journey Date</label>                        
+                                <input type="date" formControlName="journeyDate" class="form-control" [ngClass]="{ 'is-invalid': flightSearched && searchFlightControls.journeyDate.errors }">                       
+                                <div *ngIf="flightSearched && searchFlightControls.journeyDate.errors" class="invalid-feedback">                            
+                                    <div *ngIf="searchFlightControls.journeyDate.errors.required">Journey Date is required</div>                            
+                                </div>       
+                            </div> 
+                          </div>
+                    <div class="text-center">                        
+                        <button class="btn btn-primary mr-1">Search</button>                        
+                        <button class="btn btn-secondary ml-3" type="reset" (click)="resetSearchForm()">Clear</button>                   
+                    </div>               
+                    </form>           
+                </div>        
+            </div>    
+        </div>
+    
+        <table *ngIf ="flightSearched && searchFlightForm.valid" class="table table-hover mt-3" style="width: 60%; margin-left: 22rem !important;">
+            <thead style="text-align: center;">
+                <tr>
+                    <th scope="col">Airline Name</th>
+                    <th scope="col">Dept Time</th>
+                    <th scope="col">Reach Time</th>
+                    <th scope="col">BizClass TicketPrice</th>
+                    <th scope="col">NonBizClass TicketPrice</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                <tr *ngFor="let flightModel of flightDetails">
+                    <td>{{flightModel?.airlineName}}</td>
+                    <td>{{flightModel?.departureTime}}</td>
+                    <td>{{flightModel?.reachTime}}</td>
+                    <td>{{flightModel?.bizClassTicketPrice}}</td>
+                    <td>{{flightModel?.nonBizClassTicketPrice}}</td>
+                    <td>
+                        <button class="btn btn-primary" (click)="tabGroup.selectedIndex = 1" (click)=BookTickets(flightModel)>Continue Booking</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+
+    <mat-tab label="Book Ticket">
+        <div class="d-flex justify-content-center">    
+            <div class="card m-3">            
+                <div class="card-body">                
+                    <form [formGroup]="bookingInfoForm" (ngSubmit)="addBookingInfo()">
+                        <div class="form-group col">                        
+                            <label>User Name</label>
+                            <input type="text" formControlName="userName" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.userName.errors }">                                             
+                            <div *ngIf="bookingInfoAdded && bookingInfoControls.userName.errors" class="invalid-feedback">                            
+                                <div *ngIf="bookingInfoControls.userName.errors.required">User Name is required</div>                            
                             </div>       
-                          </div>
-                          <div class="form-group col-4">                        
-                            <label>Instrument Used</label>                        
-                            <input type="text" formControlName="instrumentUsed" class="form-control" [ngClass]="{ 'is-invalid': scheduleSearched && scheduleSearchControls.instrumentUsed.errors }">                       
-                            <div *ngIf="scheduleSearched && scheduleSearchControls.instrumentUsed.errors" class="invalid-feedback">                            
-                                <div *ngIf="scheduleSearchControls.instrumentUsed.errors.required">Instrument Used is required</div>                            
+                        </div>
+                        <!-- <div class="form-group col-6">                        
+                          <label>Email</label>                        
+                          <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.flightNumber.errors }">                       
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.airlineName.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.airlineName.errors.required">Flight Number is required</div>                            
+                          </div>       
+                        </div>  
+                        <div class="form-group col-6">                        
+                          <label>No Of Seats</label>                        
+                          <input type="text" formControlName="fromPlace" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.fromPlace.errors }">                       
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.fromPlace.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.fromPlace.errors.required">From Place is required</div>                            
+                          </div>       
+                        </div>  
+                        <div class="form-group col-6">                        
+                          <label>Seat Number</label>                        
+                          <input type="text" formControlName="toPlace" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.toPlace.errors }">                       
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.toPlace.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.toPlace.errors.required">To Place is required</div>                            
+                          </div>       
+                        </div>
+                        <h3>Passenger Details</h3>
+                        <div class="form-group col-4">                        
+                          <label>Name</label>                        
+                          <input type="time" placeholder="{HH:mm} format" formControlName="departureTime" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.departureTime.errors }">                       
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.departureTime.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.departureTime.errors.required">Departure Time is required</div>                            
+                          </div>       
+                        </div>                    
+                        <div class="form-group col-4">                        
+                          <label>Age</label>                        
+                          <input type="time" placeholder="{HH:mm} format" formControlName="reachTime" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.reachTime.errors }">                       
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.reachTime.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.reachTime.errors.required">Reach Time is required</div>                            
+                          </div>       
+                        </div>
+                        <div class="form-group col-4">                        
+                          <label>Gender</label>                        
+                          <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
+                                        <option value=""></option>                                
+                                        <option *ngFor="let airline of airlineList">{{airline}}</option>                                
+                            </select> 
+                          <div *ngIf="bookingInfoAdded && bookingInfoControls.scheduledDate.errors" class="invalid-feedback">                            
+                              <div *ngIf="bookingInfoControls.scheduledDate.errors.required">Scheduled Date is required</div>                            
+                          </div>       
+                        </div> 
+                        <div class="form-group col-4">                        
+                            <label>Opted For Meal</label>                        
+                            <select formControlName="optedForMeal" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.optedForMeal.errors }" [(ngModel)]="mealOpted">                       
+                                <option value=""></option>                                
+                                <option *ngFor="let meal of mealList">{{meal}}</option>                                
+                            </select>
+                            <div *ngIf="bookingInfoAdded && bookingInfoControls.optedForMeal.errors" class="invalid-feedback">                            
+                            <div *ngIf="bookingInfoControls.optedForMeal.errors.required">Opted For Meal is required</div>                            
                             </div>       
-                          </div>
-                        </div> 
+                        </div>
                         <div class="text-center">                        
-                            <button class="btn btn-primary mr-1">Search</button>                        
-                            <button class="btn btn-secondary ml-3" type="reset" (click)="resetScheduleForm()">Clear</button>                   
-                        </div>               
-                      </form>           
-                  </div>        
-              </div>    
-          </div>
-        
-            <table *ngIf ="scheduleSearched" class="table table-hover mt-3">
-                <thead style="text-align: center;">
-                    <tr>
-                        <th scope="col">Flight Id</th>
-                        <th scope="col">Flight No</th>
-                        <th scope="col">Airline Name</th>
-                        <th scope="col">From Place</th>
-                        <th scope="col">To Place</th>
-                        <th scope="col">Dept Time</th>
-                        <th scope="col">Reach Time</th>
-                        <th scope="col">Scheduled Date</th>
-                        <th scope="col">Instrument Used</th>
-                        <th scope="col">BizClass Seats</th>
-                        <th scope="col">NonBizClass Seats</th>
-                        <th scope="col">Ticket Price</th>
-                        <th scope="col">Total Rows</th>
-                        <th scope="col">Meal Opted</th>
-                    </tr>
-                </thead>
-                <tbody style="text-align: center;">
-                    <tr>
-                        <td>{{flightModel?.flightId}}</td>
-                        <td>{{flightModel?.flightNumber}}</td>
-                        <td>{{flightModel?.airlineName}}</td>
-                        <td>{{flightModel?.fromPlace}}</td>
-                        <td>{{flightModel?.toPlace}}</td>
-                        <td>{{flightModel?.departureTime}}</td>
-                        <td>{{flightModel?.reachTime}}</td>
-                        <td>{{flightModel?.scheduledDate}}</td>
-                        <td>{{flightModel?.instrumentUsed}}</td>
-                        <td>{{flightModel?.noOfBizClassSeats}}</td>
-                        <td>{{flightModel?.noOfNonBizClassSeats}}</td>
-                        <td>{{flightModel?.ticketCost}}</td>
-                        <td>{{flightModel?.noOfRows}}</td>
-                        <td>{{flightModel?.optedForMeal}}</td>
-                        <td>
-                            <button class="btn btn-secondary" (click)=BookTicket(flightModel)>Book</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-          </mat-tab> -->
+                            <button class="btn btn-primary mr-1" [disabled]="!bookingInfoForm.valid" (click)="ContinueBooking()">Continue Booking</button>                        
+                            <button class="btn btn-secondary ml-3" type="reset" (click)="resetBookingForm()">Clear</button>                   
+                        </div> -->              
+                    </form>            
+                </div>        
+            </div>    
+        </div>        
     </mat-tab>
 
     <mat-tab label="Apply Discount">

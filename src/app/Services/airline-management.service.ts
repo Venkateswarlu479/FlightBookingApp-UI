@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AirlineRegisterModel } from '../Models/airline-register-model';
@@ -10,36 +10,71 @@ import { FlightModel } from '../Models/flight-model';
 export class AirlineManagementService {
   baseUrl:string;
   url: string = '';
+  token: any;
 
   constructor(private httpClient: HttpClient) { 
     this.baseUrl = "http://localhost:7419/api/AirlineManagement/";
   }
 
-  registerAirline(airlineRegisterModel: AirlineRegisterModel): Observable<string>{
+  registerAirline(airlineRegisterModel: AirlineRegisterModel){
     this.url = this.baseUrl+"RegisterAirline";
-    return this.httpClient.post<string>(this.url, airlineRegisterModel);
+    const httpOptions = new HttpHeaders(
+      {
+        "Content-Type": 'application/json',
+        "Authorization": 'bearer '+localStorage.getItem("token")
+      }
+    )
+
+    return this.httpClient.post(this.url, airlineRegisterModel, {headers: httpOptions, responseType: 'text'});
   }
 
   getActiveAirlines(): Observable<string[]>{
     this.url = this.baseUrl+"GetAirlines";
-    return this.httpClient.get<string[]>(this.url);
+    const httpOptions = new HttpHeaders(
+      {
+        "Content-Type": 'application/json',
+        "Authorization": 'bearer '+localStorage.getItem("token")
+      }
+    )
+
+    return this.httpClient.get<string[]>(this.url, {headers: httpOptions});
   }
 
-  blockAirline(airlineName:string, userName:string):Observable<string>{
+  blockAirline(airlineName:string, userName:string){
     this.url = this.baseUrl+"BlockAirline";
     let params = new HttpParams();
     params = params.append('airlineName', airlineName);
     params = params.append('userName', userName);
-    return this.httpClient.post<string>(this.url, null, {params: {'airlineName': airlineName, 'userName': userName}})
+
+    const httpOptions = new HttpHeaders(
+      {
+        "Content-Type": 'application/json',
+        "Authorization": 'bearer '+localStorage.getItem("token")
+      }
+    )
+    
+    return this.httpClient.post(this.url, null, {headers: httpOptions, params: {'airlineName': airlineName, 'userName': userName}, responseType: 'text'});
   }
 
-  addOrScheduleFlight(flightModel: FlightModel):Observable<string>{
+  addOrScheduleFlight(flightModel: FlightModel){
     this.url = this.baseUrl+"AddOrScheduleFlight";
-    return this.httpClient.post<string>(this.url, flightModel);
+    const httpOptions = new HttpHeaders(
+      {
+        "Content-Type": 'application/json',
+        "Authorization": 'bearer '+localStorage.getItem("token")
+      }
+    )
+    return this.httpClient.post(this.url, flightModel, {headers: httpOptions, responseType: 'text'});
   }
 
   getFlightDetails(airlineName:string, flightNumber:string, instrumentUsed:string):Observable<FlightModel>{
     this.url = this.baseUrl+"FlightDetails/"+airlineName+"/"+flightNumber+"/"+instrumentUsed;
-    return this.httpClient.get<FlightModel>(this.url);
+    const httpOptions = new HttpHeaders(
+      {
+        "Content-Type": 'application/json',
+        "Authorization": 'bearer '+localStorage.getItem("token")
+      }
+    )
+    return this.httpClient.get<FlightModel>(this.url, {headers: httpOptions});
   }
 }

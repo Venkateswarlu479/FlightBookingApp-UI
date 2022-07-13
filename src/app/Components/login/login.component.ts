@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/Services/authentication.service';
+import { MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +12,12 @@ import { AuthenticationService } from 'src/app/Services/authentication.service';
 export class LoginComponent implements OnInit {
   loginform:any;
   loggedin:boolean = false;
-  token:any;
+  loginInfo:any;
 
   constructor(private formBuilder: FormBuilder, 
               private authService: AuthenticationService,
-              private router: Router) { }
+              private router: Router,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loginform = this.formBuilder.group({
@@ -37,27 +39,35 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.userLogin(this.loginform.value.userName, this.loginform.value.password)
-    .subscribe(obj =>{
-      if(obj == undefined || obj == null){
-        alert('login unsuccessful');
-      }
-      this.token = obj;
-      console.log(obj);
-      if(this.token != null){
-        this.authService.setLocalStorage(this.token);
-      }
-    });
+    this.authService.userLogin(this.loginform.value.userName, this.loginform.value.password).subscribe(
+      (data) =>{
+        this.loginInfo = data;
+        console.log("Response",data);
 
-    //Route to respective screens on successful login
-    this.router.navigate(["/airline"]);
-    //this.router.navigate(["/flight"]);
+        localStorage.setItem("userName", this.loginInfo.userName);
+        localStorage.setItem("userId", this.loginInfo.userId);
+        localStorage.setItem("token", this.loginInfo.token);
+        localStorage.setItem("role", this.loginInfo.role);
+        localStorage.setItem("emailId", this.loginInfo.emailId);
+        
+        this.snackBar.open("Login successful", "UserLogin", {duration: 1000});
 
-    alert('Login Successful!!');
+        //Route to respective screens on successful login
+        if(this.loginInfo.role === "Admin"){
+          this.router.navigate(["/airline"]);
+        }
+        if(this.loginInfo.role === "User"){
+          this.router.navigate(["/flight"]);
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.snackBar.open("Login UnSuccessful", "UserLogin", {duration: 1000});
+      }
+    );
   }
 
   onReset() {
-    this.authService.logout();
     this.loggedin = false;
     this.loginform.reset();
   }
