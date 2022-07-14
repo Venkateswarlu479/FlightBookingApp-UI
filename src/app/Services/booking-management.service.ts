@@ -41,7 +41,7 @@ export class BookingManagementService {
     return this.httpclient.post(this.url, bookingDetails, {headers: httpOptions, responseType: 'text'})
   }
 
-  getTicketDetails(pnr: string):Observable<any>{
+  getTicketDetails(pnr: string):Observable<BookingModel>{
     this.url = this.gatewayBaseUrl+"TicketDetails/"+pnr;
     const httpOptions = new HttpHeaders(
       {
@@ -50,7 +50,7 @@ export class BookingManagementService {
       }
     )
 
-    return this.httpclient.get(this.url, {headers: httpOptions});
+    return this.httpclient.get<BookingModel>(this.url, {headers: httpOptions});
   }
 
   cancelTicketByPNR(pnr: string){
@@ -65,7 +65,7 @@ export class BookingManagementService {
     return this.httpclient.post(this.url, null,{headers: httpOptions, params: {'pnrNumber': pnr}, responseType: 'text'});
   }
 
-  getBookingHistoryByEmail(email: string){
+  getBookingHistoryByEmail(email: string):Observable<BookingModel[]>{
     this.url = this.gatewayBaseUrl+"BookingHistory/"+email;
     const httpOptions = new HttpHeaders(
       {
@@ -74,7 +74,7 @@ export class BookingManagementService {
       }
     )
 
-    return this.httpclient.get(this.url, {headers: httpOptions});
+    return this.httpclient.get<BookingModel[]>(this.url, {headers: httpOptions});
   }
 
   getPassengersData(bookingId: number){

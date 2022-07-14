@@ -7,6 +7,8 @@ import { PassengerModel } from 'src/app/Models/passenger-model';
 import { BookingModel } from 'src/app/Models/booking-model';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-manage-booking',
@@ -30,7 +32,8 @@ export class ManageBookingComponent implements OnInit {
       "optForMeal": '',
       "seatNumbers": [],
       "passengerList": [],
-      "totalPrice": 0
+      "totalPrice": 0,
+      "journeydate": ''
   };
   passengersList: PassengerModel[] = [];
   seatNumbers: string[] = [];
@@ -40,6 +43,7 @@ export class ManageBookingComponent implements OnInit {
   airlineName: string = '';
   bizClassTicketPrice:number=0;
   nonBizClassTicketPrice:number=0;
+  journeyDate:string = '';
   mealList:string[] = ["Veg","Non-Veg","None"]
   mealOpted:string = '';
   bookingClassType: string[] = ["Business Class", "NonBusiness Class"]
@@ -54,13 +58,17 @@ export class ManageBookingComponent implements OnInit {
   discountApplied: boolean = false;
   discountAmount: number = 0;
   pnrNumber: string = '';
+  ticketFetched: boolean = false;
+  bookingHistory:any[] = [];
+  cancelAllowed: boolean = false;
+  date:Date = new Date()
 
-  bookingHistory:any = [];
   @ViewChild('content') content!: ElementRef;
 
   constructor(private bookingManagementService: BookingManagementService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar,
+              public datepipe: DatePipe) { }
 
   ngOnInit(): void {
     this.searchFlightForm = this.formBuilder.group({
@@ -123,8 +131,9 @@ export class ManageBookingComponent implements OnInit {
     console.log(flightModel);
     this.airlineName = flightModel.airlineName;
     this.flightId = flightModel.flightId;
-    this.bizClassTicketPrice = flightModel.bizClassTicketPrice,
-    this.nonBizClassTicketPrice = flightModel.nonBizClassTicketPrice
+    this.bizClassTicketPrice = flightModel.bizClassTicketPrice;
+    this.nonBizClassTicketPrice = flightModel.nonBizClassTicketPrice;
+    this.journeyDate = flightModel.scheduledDate;
   }
 
   get bookingInfoControls(){
@@ -166,6 +175,7 @@ export class ManageBookingComponent implements OnInit {
       "optForMeal": this.bookingInfoForm.value.optForMeal,
       "seatNumbers": this.seatNumbers,
       "passengerList": this.passengersList,
+      "journeydate": this.journeyDate,
       "totalPrice": this.bookingInfoForm.value.bookingClass == "Business Class" ? this.bizClassTicketPrice : this.nonBizClassTicketPrice
     };
 
@@ -212,7 +222,7 @@ export class ManageBookingComponent implements OnInit {
     console.log(this.bookingDetails);
     this.bookingManagementService.bookTicket(this.bookingDetails).subscribe(
       data =>{
-        this.pnrNumber = data;
+        //this.pnrNumber = data;
         console.log(data);
         this.snackBar.open("Booking successful "+data, "bookTicket")
       },
@@ -224,9 +234,12 @@ export class ManageBookingComponent implements OnInit {
   }
 
   getTicketDetailsByPNR(pnr: string){
+    let latestDate = this.datepipe.transform(this.date, "yyyy-MM-dd");
     this.bookingManagementService.getTicketDetails(pnr).subscribe(
       data => {
         console.log(data);
+        this.ticketFetched = true;
+        this.cancelAllowed = (data.journeydate == latestDate) ? true : false;
         this.ticketDetails = data;
         this.snackBar.open("Ticket Details fetched successfully", "getTicketDetailsByPNR", {duration: 1000});
       },
@@ -276,4 +289,14 @@ export class ManageBookingComponent implements OnInit {
     });
   }
   
+  onTabChanged(event: MatTabChangeEvent){
+    if(event.index == 4){
+      this.getBookingHistoryByEmailId();
+    }
+  }
+
+  viewPassengerInfo(data:any){
+    console.log(data);
+    alert("Passenger Info\n\n"+ JSON.stringify(data));
+  }
 }

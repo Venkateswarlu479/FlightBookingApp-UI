@@ -14,7 +14,9 @@ import { PageNotFoundComponent } from './Components/page-not-found/page-not-foun
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { NavbarComponent } from './Components/navbar/navbar.component'
+import { NavbarComponent } from './Components/navbar/navbar.component';
+import {MatTableModule} from '@angular/material/table'
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -34,10 +36,11 @@ import { NavbarComponent } from './Components/navbar/navbar.component'
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
