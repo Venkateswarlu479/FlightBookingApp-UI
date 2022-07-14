@@ -9,5 +9,6 @@ export interface BookingModel {
     totalPrice: number,
     seatNumbers: string[],
     passengerList: PassengerModel[],
-    airlineName: string
+    airlineName: string,
+    bookingClass: string
 }

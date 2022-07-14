@@ -8,24 +8,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AuthenticationService {
   baseUrl:string;
   url:string= '';
+  gatewayBaseUrl:string;
 
   constructor(private http: HttpClient) {
     this.baseUrl = "http://localhost:27301/api/Auth/";
+    this.gatewayBaseUrl = "http://localhost:5065/api/gateway/"
    }
 
    registerUser(username:string, password:string, email: string){
-    this.url = this.baseUrl+"Register";
-    return this.http.post(this.url, {"userName":username, "password":password, "email": email}, {responseType: 'text'});
+    this.url = this.gatewayBaseUrl+"Register";
+    return this.http.post(this.url, {"userName":username, "password":password, "emailId": email}, {responseType: 'text'});
    }
 
    userLogin(username:string, password:string){
-     this.url = this.baseUrl+"Login";
+     this.url = this.gatewayBaseUrl+"Login";
      return this.http.post(this.url, {username, password});
-   }
-
-   getUsers(){
-     const headers = new HttpHeaders({
-       'Authorization': `bearer ${JSON.parse(JSON.stringify(localStorage.getItem("UserInfo")))?.Token}`
-     });
    }
 }

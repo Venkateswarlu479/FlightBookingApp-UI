@@ -10,13 +10,15 @@ import { BookingModel } from '../Models/booking-model';
 export class BookingManagementService {
   baseUrl:string;
   url:string = '';
+  gatewayBaseUrl:string;
 
   constructor(private httpclient: HttpClient) {
     this.baseUrl = "http://localhost:22842/api/FlightBooking/";
+    this.gatewayBaseUrl = "http://localhost:5065/api/gateway/";
    }
 
   getFlights(flightSearchModel: SearchModel):Observable<any>{
-  this.url = this.baseUrl+"SearchFlight";
+  this.url = this.gatewayBaseUrl+"SearchFlight";
   const httpOptions = new HttpHeaders(
     {
       "Content-Type": 'application/json',
@@ -28,7 +30,7 @@ export class BookingManagementService {
   }
 
   bookTicket(bookingDetails: BookingModel){
-    this.url = this.baseUrl+"BookTicket";
+    this.url = this.gatewayBaseUrl+"BookTicket";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -40,7 +42,7 @@ export class BookingManagementService {
   }
 
   getTicketDetails(pnr: string):Observable<any>{
-    this.url = this.baseUrl+"TicketDetails/"+pnr;
+    this.url = this.gatewayBaseUrl+"TicketDetails/"+pnr;
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -52,7 +54,7 @@ export class BookingManagementService {
   }
 
   cancelTicketByPNR(pnr: string){
-    this.url = this.baseUrl+"CancelTicket";
+    this.url = this.gatewayBaseUrl+"CancelTicket";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -64,7 +66,7 @@ export class BookingManagementService {
   }
 
   getBookingHistoryByEmail(email: string){
-    this.url = this.baseUrl+"BookingHistory/"+email;
+    this.url = this.gatewayBaseUrl+"BookingHistory/"+email;
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -76,7 +78,7 @@ export class BookingManagementService {
   }
 
   getPassengersData(bookingId: number){
-    this.url = this.baseUrl+"PassengersData/"+bookingId;
+    this.url = this.gatewayBaseUrl+"PassengersData/"+bookingId;
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -87,8 +89,8 @@ export class BookingManagementService {
     return this.httpclient.get(this.url, {headers: httpOptions});
   }
 
-  getDiscount(discountCode: string){
-    this.url = this.baseUrl+"GetDiscount/"+discountCode;
+  getDiscount(discountCode: string): Observable<any>{
+    this.url = this.gatewayBaseUrl+"GetDiscount/"+discountCode;
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -100,7 +102,7 @@ export class BookingManagementService {
   }
 
   addDiscount(discountCode: string, amount:number){
-    this.url = this.baseUrl+"AddDiscount";
+    this.url = this.gatewayBaseUrl+"AddDiscount";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',

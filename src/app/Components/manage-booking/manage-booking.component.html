@@ -48,13 +48,13 @@
             </thead>
             <tbody style="text-align: center;">
                 <tr *ngFor="let flightModel of flightDetails">
-                    <td>{{flightModel?.airlineName}}</td>
-                    <td>{{flightModel?.departureTime}}</td>
-                    <td>{{flightModel?.reachTime}}</td>
-                    <td>{{flightModel?.bizClassTicketPrice}}</td>
-                    <td>{{flightModel?.nonBizClassTicketPrice}}</td>
+                    <td>{{flightModel.airlineName}}</td>
+                    <td>{{flightModel.departureTime}}</td>
+                    <td>{{flightModel.reachTime}}</td>
+                    <td>{{flightModel.bizClassTicketPrice}}</td>
+                    <td>{{flightModel.nonBizClassTicketPrice}}</td>
                     <td>
-                        <button class="btn btn-primary" (click)="tabGroup.selectedIndex = 1" (click)=BookTickets(flightModel)>Continue Booking</button>
+                        <button class="btn btn-primary" (click)="tabGroup.selectedIndex = 1" (click)=addFlightDetails(flightModel)>Continue To Booking</button>
                     </td>
                 </tr>
             </tbody>
@@ -66,73 +66,84 @@
             <div class="card m-3">            
                 <div class="card-body">                
                     <form [formGroup]="bookingInfoForm" (ngSubmit)="addBookingInfo()">
-                        <div class="form-group col">                        
-                            <label>User Name</label>
-                            <input type="text" formControlName="userName" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.userName.errors }">                                             
-                            <div *ngIf="bookingInfoAdded && bookingInfoControls.userName.errors" class="invalid-feedback">                            
-                                <div *ngIf="bookingInfoControls.userName.errors.required">User Name is required</div>                            
-                            </div>       
-                        </div>
-                        <!-- <div class="form-group col-6">                        
-                          <label>Email</label>                        
-                          <input type="text" formControlName="flightNumber" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.flightNumber.errors }">                       
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.airlineName.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.airlineName.errors.required">Flight Number is required</div>                            
-                          </div>       
-                        </div>  
-                        <div class="form-group col-6">                        
-                          <label>No Of Seats</label>                        
-                          <input type="text" formControlName="fromPlace" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.fromPlace.errors }">                       
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.fromPlace.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.fromPlace.errors.required">From Place is required</div>                            
-                          </div>       
-                        </div>  
-                        <div class="form-group col-6">                        
-                          <label>Seat Number</label>                        
-                          <input type="text" formControlName="toPlace" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.toPlace.errors }">                       
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.toPlace.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.toPlace.errors.required">To Place is required</div>                            
-                          </div>       
-                        </div>
-                        <h3>Passenger Details</h3>
-                        <div class="form-group col-4">                        
-                          <label>Name</label>                        
-                          <input type="time" placeholder="{HH:mm} format" formControlName="departureTime" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.departureTime.errors }">                       
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.departureTime.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.departureTime.errors.required">Departure Time is required</div>                            
-                          </div>       
-                        </div>                    
-                        <div class="form-group col-4">                        
-                          <label>Age</label>                        
-                          <input type="time" placeholder="{HH:mm} format" formControlName="reachTime" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.reachTime.errors }">                       
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.reachTime.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.reachTime.errors.required">Reach Time is required</div>                            
-                          </div>       
-                        </div>
-                        <div class="form-group col-4">                        
-                          <label>Gender</label>                        
-                          <select formControlName="airlineName" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.airlineName.errors }" [(ngModel)]="selectedAirline">                     
-                                        <option value=""></option>                                
-                                        <option *ngFor="let airline of airlineList">{{airline}}</option>                                
-                            </select> 
-                          <div *ngIf="bookingInfoAdded && bookingInfoControls.scheduledDate.errors" class="invalid-feedback">                            
-                              <div *ngIf="bookingInfoControls.scheduledDate.errors.required">Scheduled Date is required</div>                            
-                          </div>       
-                        </div> 
-                        <div class="form-group col-4">                        
-                            <label>Opted For Meal</label>                        
-                            <select formControlName="optedForMeal" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.optedForMeal.errors }" [(ngModel)]="mealOpted">                       
-                                <option value=""></option>                                
-                                <option *ngFor="let meal of mealList">{{meal}}</option>                                
-                            </select>
-                            <div *ngIf="bookingInfoAdded && bookingInfoControls.optedForMeal.errors" class="invalid-feedback">                            
-                            <div *ngIf="bookingInfoControls.optedForMeal.errors.required">Opted For Meal is required</div>                            
-                            </div>       
-                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-3">                        
+                                <label>User Name</label>
+                                <input type="text" [(ngModel)]="userName" class="form-control" formControlName="userName" readonly>
+                            </div>
+                            <div class="form-group col-3">                        
+                                <label>EmailId</label> 
+                                <input type="text" [(ngModel)]="emailId" class="form-control" formControlName="email" readonly>                       
+                            </div>
+                            <div class="form-group col-2">                        
+                                <label>Bookingclass Type</label>                        
+                                <select formControlName="bookingClass" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.bookingClass.errors }" [(ngModel)]="bookingClassSelected">                     
+                                    <option value=""></option>                                
+                                    <option *ngFor="let class of bookingClassType">{{class}}</option>
+                                </select>
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.bookingClass.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.bookingClass.errors.required">Bookingclass Type is required</div>                            
+                                </div>       
+                            </div>
+                            <div class="form-group col-2">                        
+                                <label>No Of Seats</label>                        
+                                <input type="number" formControlName="noOfSeats" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.noOfSeats.errors }">                       
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.noOfSeats.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.noOfSeats.errors.required">No Of Seats is required</div>                            
+                                </div>       
+                            </div>
+                            <div class="form-group col-2">                        
+                                <label>Opted For Meal</label>                        
+                                <select formControlName="optForMeal" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.optForMeal.errors }" [(ngModel)]="mealOpted">                       
+                                    <option value=""></option>                                
+                                    <option *ngFor="let meal of mealList">{{meal}}</option>                                
+                                </select>
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.optForMeal.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.optForMeal.errors.required">Opted For Meal is required</div>                            
+                                </div>       
+                            </div>
+                        </div>
+                        <h3>Passenger Details:</h3>
+                        <div class="form-row">
+                            <div class="form-group col-4">                        
+                                <label>Name</label>                        
+                                <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.name.errors }">                       
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.name.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.name.errors.required">Name is required</div>                            
+                                </div>       
+                            </div>                    
+                            <div class="form-group col-2">                        
+                                <label>Age</label>                        
+                                <input type="number" formControlName="age" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.age.errors }">                       
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.age.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.age.errors.required">Age is required</div>                            
+                                </div>       
+                            </div>
+                            <div class="form-group col-3">                        
+                                <label>Gender</label>                        
+                                <select formControlName="gender" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.gender.errors }" [(ngModel)]="genderSelected">                     
+                                    <option value=""></option>                                
+                                    <option *ngFor="let gender of genderType">{{gender}}</option>
+                                </select> 
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.gender.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.gender.errors.required">Gender is required</div>                            
+                                </div>       
+                            </div>
+                            <div class="form-group col-2">                        
+                                <label>Seat Number</label>                        
+                                <input type="text" formControlName="seatNumber" class="form-control" [ngClass]="{ 'is-invalid': bookingInfoAdded && bookingInfoControls.seatNumber.errors }">                       
+                                <div *ngIf="bookingInfoAdded && bookingInfoControls.seatNumber.errors" class="invalid-feedback">                            
+                                    <div *ngIf="bookingInfoControls.seatNumber.errors.required">SeatNumber is required</div>                            
+                                </div>       
+                           </div>
+                            <div class="form-group col-1 mt-4">
+                                <button class="btn btn-success" (click)="addPassenger(bookingInfoForm.value)" *ngIf="(bookingInfoForm.value.noOfSeats > passengerCount)">+</button>
+                            </div>
+                        </div> 
                         <div class="text-center">                        
-                            <button class="btn btn-primary mr-1" [disabled]="!bookingInfoForm.valid" (click)="ContinueBooking()">Continue Booking</button>                        
+                            <button class="btn btn-primary mr-1" (click)="tabGroup.selectedIndex = 2">Continue Booking</button>                        
                             <button class="btn btn-secondary ml-3" type="reset" (click)="resetBookingForm()">Clear</button>                   
-                        </div> -->              
+                        </div>           
                     </form>            
                 </div>        
             </div>    
@@ -140,11 +151,62 @@
     </mat-tab>
 
     <mat-tab label="Apply Discount">
-        apply discount on ticket price
+        <div class="d-flex justify-content-center">
+            <div class="card m-3">
+                <div class="card-body">
+                    <form [formGroup]="discountForm" (ngSubmit)="applyDiscount()">
+                        <div class="form-row">
+                            <div class="form-group col-8">
+                                <label>Discount Code</label>
+                                <input type="text" placeholder="Have code? enter here" formControlName="discountCode" class="form-control" [ngClass]="{ 'is-invalid': discountApplied && discountFormControls.discountCode.errors }">
+                                <div *ngIf="discountApplied && discountFormControls.discountCode.errors" class="invalid-feedback">                            
+                                    <div *ngIf="discountFormControls.discountCode.errors.required">Discount Code is required</div>                            
+                                </div> 
+                            </div>
+                            <div class="mt-4 col-1">
+                                <button class="btn btn-success" [disabled]="!discountFormControls.discountCode.value">Apply</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="text-center">                        
+                        <button class="btn btn-primary mt-2" (click)="bookTicket()">Book Ticket</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>>
     </mat-tab>
     
     <mat-tab label="Manage Bookings">
-        view, cancel, download ticket details
+        <div id="content" #content>
+            <h1>Ticket Information</h1>
+            <table class="table">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th scope="col">Airline Name</th>
+                        <th scope="col">Dept Time</th>
+                        <th scope="col">Reach Time</th>
+                        <th scope="col">BizClass TicketPrice</th>
+                        <th scope="col">NonBizClass TicketPrice</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <tr>
+                        <td>airlineName</td>
+                        <td>flightModel.departureTime</td>
+                        <td>flightModel.reachTime</td>
+                        <td>flightModel.bizClassTicketPrice</td>
+                        <td>flightModel.nonBizClassTicketPrice</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-right">
+            <button class="btn btn-primary mr-5" >View</button>
+            <button class="btn btn-primary mr-5" >Cancel</button>
+            <button class="btn btn-primary mr-5" (click)=downloadTicket()>Download</button>
+        </div>
+        
     </mat-tab>
     
     <mat-tab label="Booking History">

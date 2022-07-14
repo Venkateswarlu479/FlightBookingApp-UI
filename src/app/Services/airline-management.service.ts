@@ -11,13 +11,15 @@ export class AirlineManagementService {
   baseUrl:string;
   url: string = '';
   token: any;
+  gatewayBaseUrl:string;
 
   constructor(private httpClient: HttpClient) { 
     this.baseUrl = "http://localhost:7419/api/AirlineManagement/";
+    this.gatewayBaseUrl = "http://localhost:5065/api/gateway/"
   }
 
   registerAirline(airlineRegisterModel: AirlineRegisterModel){
-    this.url = this.baseUrl+"RegisterAirline";
+    this.url = this.gatewayBaseUrl+"RegisterAirline";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -29,7 +31,7 @@ export class AirlineManagementService {
   }
 
   getActiveAirlines(): Observable<string[]>{
-    this.url = this.baseUrl+"GetAirlines";
+    this.url = this.gatewayBaseUrl+"GetAirlines";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -41,7 +43,7 @@ export class AirlineManagementService {
   }
 
   blockAirline(airlineName:string, userName:string){
-    this.url = this.baseUrl+"BlockAirline";
+    this.url = this.gatewayBaseUrl+"BlockAirline";
     let params = new HttpParams();
     params = params.append('airlineName', airlineName);
     params = params.append('userName', userName);
@@ -57,7 +59,7 @@ export class AirlineManagementService {
   }
 
   addOrScheduleFlight(flightModel: FlightModel){
-    this.url = this.baseUrl+"AddOrScheduleFlight";
+    this.url = this.gatewayBaseUrl+"AddFlight";
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',
@@ -68,7 +70,7 @@ export class AirlineManagementService {
   }
 
   getFlightDetails(airlineName:string, flightNumber:string, instrumentUsed:string):Observable<FlightModel>{
-    this.url = this.baseUrl+"FlightDetails/"+airlineName+"/"+flightNumber+"/"+instrumentUsed;
+    this.url = this.gatewayBaseUrl+"FlightDetails/"+airlineName+"/"+flightNumber+"/"+instrumentUsed;
     const httpOptions = new HttpHeaders(
       {
         "Content-Type": 'application/json',

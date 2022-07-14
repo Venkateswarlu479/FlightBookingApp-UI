@@ -147,7 +147,7 @@ export class ManageAirlineComponent implements OnInit {
     //service call
     this.airlineManageService.blockAirline(this.selectedAirline, this.userName).subscribe(
       data => {
-          this.snackBar.open("Airline registered Successfully", "blockAirline", {duration: 1000});
+          this.snackBar.open("Airline blocked Successfully", "blockAirline", {duration: 1000});
       },
       error =>{
         console.log(error);
@@ -223,9 +223,14 @@ export class ManageAirlineComponent implements OnInit {
     this.airlineManageService.getFlightDetails(scheduleSearchInputs.airlineName, scheduleSearchInputs.flightNumber, scheduleSearchInputs.instrumentUsed)
     .subscribe(
       data => {
-        this.flightModel = data;
-        console.log(this.flightModel);
-        this.snackBar.open("Flight details fetched Successfully", "getFlightDetails", {duration: 1000});
+        if(data === null){
+          this.snackBar.open("No flights found", "getFlightDetails", {duration: 1000});
+        }
+        else{
+          this.flightModel = data;
+          console.log(this.flightModel);
+          this.snackBar.open("Flight details fetched Successfully", "getFlightDetails", {duration: 1000});
+        }
       },
       error =>{
         console.log(error);
