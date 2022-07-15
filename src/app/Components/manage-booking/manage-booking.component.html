@@ -54,7 +54,7 @@
                     <td>{{flightModel.bizClassTicketPrice}}</td>
                     <td>{{flightModel.nonBizClassTicketPrice}}</td>
                     <td>
-                        <button class="btn btn-primary" (click)="tabGroup.selectedIndex = 1" (click)=addFlightDetails(flightModel)>Continue To Booking</button>
+                        <button class="btn btn-primary" (click)="tabGroup.selectedIndex = 1" (click)=addFlightDetails(flightModel)>Continue Booking</button>
                     </td>
                 </tr>
             </tbody>
@@ -192,6 +192,7 @@
                             <th>PNR</th>
                             <th>FlightId</th>
                             <th>Airlinename</th>
+                            <th>JourneyDate</th>
                             <th>TotalPrice</th>
                             <th>BookingClass</th>
                             <th>BookingStatus</th>
@@ -204,6 +205,7 @@
                             <td>{{ticketDetails.pnr}}</td>
                             <td>{{ticketDetails.flightId}}</td>
                             <td>{{ticketDetails.airlineName}}</td>
+                            <td>{{ticketDetails.journeydate}}</td>
                             <td>{{ticketDetails.totalPrice}}</td>
                             <td>{{ticketDetails.bookingClass}}</td>
                             <td>{{ticketDetails.ticketStatus}}</td>
@@ -231,6 +233,7 @@
                         <th>PNR</th>
                         <th>FlightId</th>
                         <th>Airlinename</th>
+                        <th>JourneyDate</th>
                         <th>TotalPrice</th>
                         <th>BookingClass</th>
                         <th>BookingStatus</th>
@@ -243,6 +246,7 @@
                         <td>{{ticket.pnr}}</td>
                         <td>{{ticket.flightId}}</td>
                         <td>{{ticket.airlineName}}</td>
+                        <td>{{ticket.journeydate}}</td>
                         <td>{{ticket.totalPrice}}</td>
                         <td>{{ticket.bookingClass}}</td>
                         <td>{{ticket.ticketStatus}}</td>
